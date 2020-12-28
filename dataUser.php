@@ -2,7 +2,8 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manajemen Data User</h1>
-          <p class="mb-4">Berikut adalah data peserta yang sudah mendaftar. Dihalaman ini admin dapat membuat, mengubah, serta menghapus data setiap user.</p>
+          <p class="mb-4"><?php echo ($_SESSION['akses_level'] == '0') ? "Berikut adalah data peserta yang sudah mendaftar. Dihalaman ini admin dapat membuat, mengubah, serta menghapus data setiap user." : "Dihalaman ini anda dapat mengubah data akun anda." ?></p>
+
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
@@ -12,7 +13,9 @@
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-4 pull-right">
-                    <a href="home.php?halaman=tambahuser" class="btn btn-sm btn-info " role="button" aria-disabled="true">Tambah Data User</a>
+                    <?php if ($_SESSION['akses_level'] == '0') { ?>
+                      <a href="home.php?halaman=tambahuser" class="btn btn-sm btn-info " role="button" aria-disabled="true">Tambah Data User</a>
+                      <?php } ?>
                     </div>
                 </div>
               <div class="table-responsive">
@@ -37,7 +40,12 @@
                   </tfoot>
                   <tbody>
                   <?php 
+                    if ($_SESSION['akses_level'] == '1') {
+                      $data_user = $db->ambilUser($_SESSION['username']);
+                    }
+                    else{
                     $data_user = $db->ambilUser();
+                    }
                     $no = 1;
                     foreach ($data_user as $row) {
                     
@@ -57,9 +65,11 @@
                           }
                           else{ ?>
                           <a href="home.php?halaman=edituser&id-barang=<?= $row['id'] ?>" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Edit</a> 
+                        <?php if ($_SESSION['akses_level'] == '0') { ?>
                           <?php if ($row['akses_level'] == '1') { ?>
                             <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $row['id'] ?>" disabled="true">Hapus</a>
                           <?php } ?>
+                        <?php } ?>
                           
                         <?php } ?>
                         </td>

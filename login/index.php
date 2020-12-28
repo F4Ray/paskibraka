@@ -13,6 +13,8 @@ if (isset($_POST['login'])) {
         $_SESSION['username'] = $dataUser['username'];
         $_SESSION['nama'] = $dataUser['nama'];
         $_SESSION['password'] = $dataUser['password'];
+        $_SESSION['id'] = $dataUser['id'];
+        $_SESSION['akses_level'] = $dataUser['akses_level'];	
     	if ($dataUser['akses_level'] == '1') {
     		header('location:../home.php?halaman=utama');
     	}elseif ($dataUser['akses_level'] == '0') {

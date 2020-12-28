@@ -32,7 +32,9 @@ class database{
             'tambahuser'=>'tambahuser.php',
             'edituser'=>'edituser.php',
             'returnbarang'=>'returnbarang.php',
-            'transaksi'=>'transaksi.php'
+            'transaksi'=>'transaksi.php',
+            'berkas'=>'berkas.php',
+            'upberkas'=>'upberkas.php'
         ];
        
         if (array_key_exists($idhalaman, $halaman)) {
@@ -72,9 +74,13 @@ class database{
         }
     }
     // simpanBarang("Tunikku tes tambah",330,30000,"sedang digudang",1,"sedang digudang");
-    function ambilUser()
+    function ambilUser($user="semua")
     {
-        $query = "SELECT * FROM tb_users ORDER BY akses_level ASC";
+        if ($user == "semua") {
+             $query = "SELECT * FROM tb_users ORDER BY akses_level ASC";
+        }else{
+             $query = "SELECT * FROM tb_users WHERE username='$user' ORDER BY akses_level ASC";
+        }
         $sql = mysqli_query($this->koneksi,$query);
         while($row = mysqli_fetch_array($sql)){
 			$hasil[] = $row;
@@ -109,8 +115,10 @@ class database{
     function hapusUser($id)
     {
         $query = "DELETE FROM tb_users WHERE id=$id";
+        $queryHapusBerkas = "DELETE FROM tb_berkas WHERE id_user=$id";
         $sql = mysqli_query($this->koneksi,$query);
-        if($sql == true) {
+        $sqlHapusBerkas = mysqli_query($this->koneksi,$queryHapusBerkas);
+        if($sql == true AND $sqlHapusBerkas) {
             return true;
         }
         else{
@@ -182,6 +190,72 @@ class database{
         }
     }
 
+    function cekBerkas($id)
+    {
+        $query = "SELECT * FROM tb_berkas WHERE id_user=$id";
+        $sql = mysqli_query($this->koneksi, $query);
+        $row =  mysqli_fetch_array($sql);
+
+        return $row;
+    }
+
+    function buatBerkas($berkasnya,$path,$id_user)
+    {
+        
+        if ($berkasnya=="all") {
+            $query = "INSERT INTO tb_berkas VALUES(null,null,null,null,null,$id_user)";
+        }elseif ($berkasnya=="biodata") {
+            $query = "UPDATE tb_berkas SET biodata='$path' WHERE id_user=$id_user";
+        }elseif ($berkasnya=="pernyataan") {
+            $query = "UPDATE tb_berkas SET pernyataan='$path' WHERE id_user=$id_user";
+        }elseif ($berkasnya=="izin") {
+            $query = "UPDATE tb_berkas SET izin='$path' WHERE id_user=$id_user";
+        }elseif ($berkasnya=="foto") {
+            $query = "UPDATE tb_berkas SET foto='$path' WHERE id_user=$id_user";
+        }
+        $sql = mysqli_query($this->koneksi,$query);
+        return $sql;
+    }
+
+    function hapusBerkas($id_user,$berkasnya)
+    {
+        if ($berkasnya=="biodata") {
+            $query = "UPDATE tb_berkas SET biodata=null WHERE id_user=$id_user";
+        }elseif ($berkasnya=="pernyataan") {
+            $query = "UPDATE tb_berkas SET pernyataan=null WHERE id_user=$id_user";
+        }elseif ($berkasnya=="izin") {
+            $query = "UPDATE tb_berkas SET izin=null WHERE id_user=$id_user";
+        }elseif ($berkasnya=="foto") {
+            $query = "UPDATE tb_berkas SET foto=null WHERE id_user=$id_user";
+        }
+        $sql = mysqli_query($this->koneksi,$query);
+        return $sql;
+    }
+
+    function pindahkanFile($tempName,$name)
+    {
+        $array = explode('.', $name);
+        $extension = end($array);
+        $dirUpload = "userx/uploaded-docs/";
+        $keyName = $_SESSION['username']."-".$this->random_string(4);
+        $pathDb = $dirUpload.$keyName.".".$extension;
+        $pindahkan = move_uploaded_file($tempName, $pathDb);
+        $hasil = [$pindahkan,$pathDb];
+        return $hasil;
+    }
+
+    function random_string($length) 
+    {
+        $key = '';
+        $keys = array_merge(range(0, 9), range('a', 'z'));
+
+        for ($i = 0; $i < $length; $i++) {
+            $key .= $keys[array_rand($keys)];
+        }
+
+        return $key;
+    }
+
     //fungsi transaksi
     function ambilTransaksi()
     {
@@ -248,6 +322,8 @@ class database{
     {
         $query = "INSERT INTO tb_users VALUES (null,'$nama','$username','$password','1')";
         $sql = mysqli_query($this->koneksi,$query);
+        $last_id = mysqli_insert_id($this->koneksi);
+        $this->buatBerkas("all","null",$last_id);
         return $sql;
     }
 
@@ -303,5 +379,10 @@ if (isset($_GET['idhapus'])) {
     $db->hapusUser($_GET['idhapus']);
     header("Location: home.php?halaman=datauser");
     // die();
+}
+
+if (isset($_GET['hapusdoc'])) {
+    $db->hapusBerkas($_GET['hapusdoc'],$_GET['berkasnya']);
+    header("Location: home.php?halaman=berkas");
 }
 ?>

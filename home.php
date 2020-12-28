@@ -48,6 +48,21 @@ if (isset($_POST['returnBarang'])) {
     if($returnBarang == true){
         header("Refresh:2;url=home.php?halaman=returnbarang");}
     }
+if (isset($_POST['simpanBiodata'])) {
+  $namaSementara = $_FILES['fileBiodata']['tmp_name'];
+  $namaFile = $_FILES['fileBiodata']['name'];
+  $pindah = $db->pindahkanFile($namaSementara,$namaFile);
+  if ($pindah[0] == true) {
+    $uploadkan = $db->buatBerkas("biodata",$pindah[1],$_SESSION['id']);
+    // var_dump($uploadkan);
+    if ($uploadkan == true) {
+      header("Refresh:2;url=home.php?halaman=berkas");
+    }else{
+      var_dump($uploadkan);
+    }
+
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,6 +88,9 @@ if (isset($_POST['returnBarang'])) {
       integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" 
       crossorigin="anonymous">
 
+  <?php if ($_GET['halaman']=="upberkas") {?>
+  <link rel="stylesheet" type="text/css" href="css/cssfileupload.css">
+  <?php } ?>
 </head>
 
 <body id="page-top">
@@ -121,8 +139,16 @@ if (isset($_POST['returnBarang'])) {
       <li class="nav-item <?php if($_GET['halaman'] == 'datauser' || $_GET['halaman'] == 'tambahuser' || $_GET['halaman'] == 'edituser'){echo 'active';} ?> ">
         <a class="nav-link" href="home.php?halaman=datauser">
           <i class="fas fa-fw fa-table"></i>
-          <span>Manajemen Data User</span></a>
+          <span><?php echo($_SESSION['akses_level'] == "0") ? "Manajemen Data User" : "Manajemen Akun" ?></span></a>
       </li>
+
+      <?php if ($_SESSION['akses_level'] == "1") { ?>
+      <li class="nav-item <?php if($_GET['halaman'] == 'berkas'){echo 'active';} ?>">
+        <a class="nav-link" href="home.php?halaman=berkas">
+          <i class="fas fa-fw fa-cart-plus"></i>
+          <span>Manajemen Berkas</span></a>
+      </li>
+      <?php } ?>
 
       <!-- Nav Item - Charts -->
       <li class="nav-item <?php if($_GET['halaman'] == 'returnbarang'){echo 'active';} ?>">
@@ -270,6 +296,9 @@ if (isset($_POST['returnBarang'])) {
         crossorigin="anonymous">
   </script>
   <script  src="js/bootstrap-show-password.min.js"></script>
+  <?php if ($_GET['halaman']=="upberkas") {?>
+  <script  src="js/jsformupload.js"></script>
+  <?php } ?>
 
 </body>
 
