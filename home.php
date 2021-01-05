@@ -49,11 +49,56 @@ if (isset($_POST['returnBarang'])) {
         header("Refresh:2;url=home.php?halaman=returnbarang");}
     }
 if (isset($_POST['simpanBiodata'])) {
-  $namaSementara = $_FILES['fileBiodata']['tmp_name'];
-  $namaFile = $_FILES['fileBiodata']['name'];
+  $namaSementara = $_FILES['fileBerkas']['tmp_name'];
+  $namaFile = $_FILES['fileBerkas']['name'];
   $pindah = $db->pindahkanFile($namaSementara,$namaFile);
   if ($pindah[0] == true) {
     $uploadkan = $db->buatBerkas("biodata",$pindah[1],$_SESSION['id']);
+    // var_dump($uploadkan);
+    if ($uploadkan == true) {
+      header("Refresh:2;url=home.php?halaman=berkas");
+    }else{
+      var_dump($uploadkan);
+    }
+
+  }
+}
+if (isset($_POST['simpanPernyataan'])) {
+  $namaSementara = $_FILES['fileBerkas']['tmp_name'];
+  $namaFile = $_FILES['fileBerkas']['name'];
+  $pindah = $db->pindahkanFile($namaSementara,$namaFile);
+  if ($pindah[0] == true) {
+    $uploadkan = $db->buatBerkas("pernyataan",$pindah[1],$_SESSION['id']);
+    // var_dump($uploadkan);
+    if ($uploadkan == true) {
+      header("Refresh:2;url=home.php?halaman=berkas");
+    }else{
+      var_dump($uploadkan);
+    }
+
+  }
+}
+if (isset($_POST['simpanIzin'])) {
+  $namaSementara = $_FILES['fileBerkas']['tmp_name'];
+  $namaFile = $_FILES['fileBerkas']['name'];
+  $pindah = $db->pindahkanFile($namaSementara,$namaFile);
+  if ($pindah[0] == true) {
+    $uploadkan = $db->buatBerkas("izin",$pindah[1],$_SESSION['id']);
+    // var_dump($uploadkan);
+    if ($uploadkan == true) {
+      header("Refresh:2;url=home.php?halaman=berkas");
+    }else{
+      var_dump($uploadkan);
+    }
+
+  }
+}
+if (isset($_POST['simpanFoto'])) {
+  $namaSementara = $_FILES['fileBerkas']['tmp_name'];
+  $namaFile = $_FILES['fileBerkas']['name'];
+  $pindah = $db->pindahkanFile($namaSementara,$namaFile);
+  if ($pindah[0] == true) {
+    $uploadkan = $db->buatBerkas("foto",$pindah[1],$_SESSION['id']);
     // var_dump($uploadkan);
     if ($uploadkan == true) {
       header("Refresh:2;url=home.php?halaman=berkas");
@@ -150,18 +195,13 @@ if (isset($_POST['simpanBiodata'])) {
       </li>
       <?php } ?>
 
-      <!-- Nav Item - Charts -->
-      <li class="nav-item <?php if($_GET['halaman'] == 'returnbarang'){echo 'active';} ?>">
-        <a class="nav-link" href="home.php?halaman=returnbarang">
+      <?php if ($_SESSION['akses_level'] == "0") { ?>
+      <li class="nav-item <?php if($_GET['halaman'] == 'peserta'){echo 'active';} ?>">
+        <a class="nav-link" href="home.php?halaman=peserta">
           <i class="fas fa-fw fa-cart-plus"></i>
-          <span>Return Barang</span></a>
+          <span>Manajemen Peserta</span></a>
       </li>
-
-      <li class="nav-item <?php if($_GET['halaman'] == 'transaksi'){echo 'active';} ?>">
-        <a class="nav-link" href="home.php?halaman=transaksi">
-          <i class="fas fa-fw fa-th-list"></i>
-          <span>Daftar Transaksi</span></a>
-      </li>
+      <?php } ?>
       
 
       <!-- Divider -->

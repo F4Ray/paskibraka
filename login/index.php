@@ -60,7 +60,8 @@ if (isset($_POST['login'])) {
 			<div class="wrap-login100 p-b-160 p-t-50">
 				<form class="login100-form validate-form" autocomplete="off" method="POST" action="<?php $_SERVER['PHP_SELF'] ?>"> 
 					<span class="login100-form-title p-b-43">
-						Account Login
+						<img src="../img/LOGO_PEMKO.png" width="189px" height="236px"> <br/>
+						Login
 					</span>
 					
 					<div class="wrap-input100 rs1 validate-input" data-validate = "Username is required">
@@ -78,6 +79,7 @@ if (isset($_POST['login'])) {
 						<button class="login100-form-btn" name="login">
 							Sign in
 						</button>
+					<div style="margin-top: 12px;color: red"><a href="sign-up.php" style="color: #60E744;font-weight: bold;">Daftar Disini</a></div>
 					</div>
 				</form>
 				<?php

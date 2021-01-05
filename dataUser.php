@@ -2,7 +2,7 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Manajemen Data User</h1>
-          <p class="mb-4"><?php echo ($_SESSION['akses_level'] == '0') ? "Berikut adalah data peserta yang sudah mendaftar. Dihalaman ini admin dapat membuat, mengubah, serta menghapus data setiap user." : "Dihalaman ini anda dapat mengubah data akun anda." ?></p>
+          <p class="mb-4"><?php echo ($_SESSION['akses_level'] == '0') ? "Berikut adalah data akun peserta yang sudah mendaftar. Dihalaman ini admin dapat membuat, mengubah, serta menghapus data setiap user." : "Dihalaman ini anda dapat mengubah data akun anda." ?></p>
 
 
           <!-- DataTales Example -->
@@ -64,7 +64,7 @@
                             <?php
                           }
                           else{ ?>
-                          <a href="home.php?halaman=edituser&id-barang=<?= $row['id'] ?>" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Edit</a> 
+                          <a href="home.php?halaman=edituser&id-user=<?= $row['id'] ?>" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Edit</a> 
                         <?php if ($_SESSION['akses_level'] == '0') { ?>
                           <?php if ($row['akses_level'] == '1') { ?>
                             <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $row['id'] ?>" disabled="true">Hapus</a>

@@ -35,8 +35,8 @@
                           if ($berkas['biodata'] != null) {
                           ?>
                           <a href="<?= $berkas['biodata'] ?>" target="_blank" class="btn btn-sm btn-info " role="button" aria-disabled="true">Lihat</a> 
-                          <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a> 
-                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $berkas['biodata'] ?>" disabled="true">Hapus</a>
+                          <!-- <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a>  -->
+                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModalhapusBio" disabled="true">Hapus</a>
                           <?php
                           }else{
                           ?>
@@ -50,8 +50,8 @@
                           if ($berkas['pernyataan'] != null) {
                           ?>
                           <a href="<?= $berkas['pernyataan'] ?>" target="_blank" class="btn btn-sm btn-info " role="button" aria-disabled="true">Lihat</a> 
-                          <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a> 
-                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $berkas['pernyataan'] ?>" disabled="true">Hapus</a>
+                          <!-- <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a>  -->
+                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModalPernyataan" disabled="true">Hapus</a>
                           <?php
                           }else{
                           ?>
@@ -65,8 +65,8 @@
                           if ($berkas['izin'] != null) {
                           ?>
                           <a href="<?= $berkas['izin'] ?>" target="_blank" class="btn btn-sm btn-info " role="button" aria-disabled="true">Lihat</a> 
-                          <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a> 
-                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $berkas['izin'] ?>" disabled="true">Hapus</a>
+                          <!-- <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a>  -->
+                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModalIzin" disabled="true">Hapus</a>
                           <?php
                           }else{
                           ?>
@@ -79,9 +79,10 @@
                           <?php $berkas = $db->cekBerkas($_SESSION['id']);
                           if ($berkas['foto'] != null) {
                           ?>
-                          <a href="<?= $berkas['foto'] ?>" target="_blank" class="btn btn-sm btn-info " role="button" aria-disabled="true">Lihat</a> 
-                          <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a> 
-                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModal<?= $berkas['foto'] ?>" disabled="true">Hapus</a>
+                          <!-- <a href="<?= $berkas['foto'] ?>" target="_blank" class="btn btn-sm btn-info " role="button" aria-disabled="true">Lihat</a>  -->
+                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-info " data-target="#lihatModalFoto">Lihat</a>
+                          <!-- <a href="home.php?halaman=upberkas&act=" class="btn btn-sm btn-warning " role="button" aria-disabled="true">Ubah</a>  -->
+                          <a href="#" data-toggle="modal"  class="btn btn-sm btn-danger " data-target="#logoutModalFoto">Hapus</a>
                           <?php
                           }else{
                           ?>
@@ -100,7 +101,7 @@
 
 </div>
 
-<div class="modal fade" id="logoutModal<?= $berkas['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="logoutModalhapusBio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -109,10 +110,87 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Klik tombol hapus apabila anda yakin ingin mengahapus file biodata anda ? </div>
+        <div class="modal-body">Klik tombol hapus apabila anda yakin ingin biodata anda? <br/>
+          <small style="color: red">Setelah dihapus, file tidak bisa dikembalikan</small>
+         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
           <a class="btn btn-primary" href="controller.php?hapusdoc=<?= $_SESSION['id'] ?>&berkasnya=biodata">Hapus</a>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="logoutModalPernyataan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Yakin Ingin Menghapus?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Klik tombol hapus apabila anda yakin ingin pernyataan anda? <br/>
+          <small style="color: red">Setelah dihapus, file tidak bisa dikembalikan</small>
+         </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <a class="btn btn-primary" href="controller.php?hapusdoc=<?= $_SESSION['id'] ?>&berkasnya=pernyataan">Hapus</a>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="logoutModalIzin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Yakin Ingin Menghapus?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Klik tombol hapus apabila anda yakin ingin izin anda? <br/>
+          <small style="color: red">Setelah dihapus, file tidak bisa dikembalikan</small>
+         </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <a class="btn btn-primary" href="controller.php?hapusdoc=<?= $_SESSION['id'] ?>&berkasnya=izin">Hapus</a>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="logoutModalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Yakin Ingin Menghapus?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Klik tombol hapus apabila anda yakin ingin foto anda? <br/>
+          <small style="color: red">Setelah dihapus, file tidak bisa dikembalikan</small>
+         </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <a class="btn btn-primary" href="controller.php?hapusdoc=<?= $_SESSION['id'] ?>&berkasnya=foto">Hapus</a>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="lihatModalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Foto Anda</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="<?= $berkas['foto'] ?>" style="max-height: 100%; max-width: 100%; object-fit: contain; display: block;">
+         </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Tutup</button>
         </div>
       </div>
     </div>

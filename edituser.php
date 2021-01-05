@@ -3,7 +3,7 @@
   if ($editBarang == true) {
 ?>
     <div class="alert alert-success" role="alert">
-        Data berhasil Diubah, halaman data barang akan di load dalam 2 detik
+        Data berhasil Diubah, halaman data user akan di load dalam 2 detik
     </div>
   <?php }}
     ?>
@@ -12,11 +12,11 @@
       <div class="card">
         <div class="card-header card-header-primary">
           <h4 class="card-title">Update Data Barang</h4>
-          <p class="card-category">Silahkan edit data barang</p>
+          <p class="card-category">Silahkan edit data user</p>
         </div>
         <div class="card-body mt-2">
             <?php
-            $data_user = $db->ambilUserFromId($_GET['id-barang']);
+            $data_user = $db->ambilUserFromId($_GET['id-user']);
             $no = 1;
             ?>
         <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" autocomplete="off">

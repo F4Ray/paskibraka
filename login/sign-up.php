@@ -54,6 +54,7 @@ if (isset($_POST['login'])) {
 			<div class="wrap-login100 p-b-160 p-t-50">
 				<form class="login100-form validate-form" autocomplete="off" method="POST" action="<?php $_SERVER['PHP_SELF'] ?>"> 
 					<span class="login100-form-title p-b-43">
+						<img src="../img/LOGO_PEMKO.png" width="189px" height="236px"> <br/>
 						Daftar Disini
 					</span>
 					

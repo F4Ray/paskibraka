@@ -1,12 +1,13 @@
 <div class="container-fluid">
-<?php if (isset($editBarang)) {
-  if ($editBarang == true) {
+<?php if (isset($uploadkan)) {
+  if ($uploadkan == true) {
 ?>
     <div class="alert alert-success" role="alert">
-        Data berhasil Diubah, halaman data barang akan di load dalam 2 detik
+        File berhasil diupload, halaman manajemen berkas akan di load dalam 3 detik
     </div>
-  <?php }}
-    ?>
+  <?php }
+  }
+?>
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800"><?php echo ($_GET['act'] == "upload") ? "Upload File Bioadata" : "Lihat File Biodata" ?></h1>
@@ -28,11 +29,28 @@
                 </div>
               	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
 				  <div class="input-file-container">  
-				    <input class="input-file" id="my-file" name="fileBiodata" type="file">
-				    <label tabindex="0" for="my-file" class="input-file-trigger">Pilih file biodatamu disini..</label>
+				    <input class="input-file" id="my-file" name="fileBerkas" type="file">
+            <?php if ($_GET['act'] == "uploadbio"): ?>
+            <label tabindex="0" for="my-file" class="input-file-trigger">Pilih file biodatamu disini..</label>
+          <?php elseif($_GET['act'] == "uploadpernya"): ?>
+            <label tabindex="0" for="my-file" class="input-file-trigger">Pilih file pernyataaan disini..</label>
+          <?php elseif($_GET['act'] == "uploadizin"): ?>
+            <label tabindex="0" for="my-file" class="input-file-trigger">Pilih file izin disini..</label>
+          <?php elseif($_GET['act'] == "uploadfoto"): ?>
+            <label tabindex="0" for="my-file" class="input-file-trigger">Pilih file foto disini..</label>
+          <?php endif ?>
+				    
 				  </div>
 				  <p class="file-return"></p>
-				  <button type="submit" name="simpanBiodata" class="btn btn-primary pull-right">Simpan</button>
+				  <?php if ($_GET['act'] == "uploadbio"): ?>
+				  	<button type="submit" name="simpanBiodata" class="btn btn-primary pull-right">Simpan</button>
+          <?php elseif($_GET['act'] == "uploadpernya"): ?>
+            <button type="submit" name="simpanPernyataan" class="btn btn-primary pull-right">Simpan</button>
+          <?php elseif($_GET['act'] == "uploadizin"): ?>
+            <button type="submit" name="simpanIzin" class="btn btn-primary pull-right">Simpan</button>
+          <?php elseif($_GET['act'] == "uploadfoto"): ?>
+            <button type="submit" name="simpanFoto" class="btn btn-primary pull-right">Simpan</button>
+				  <?php endif ?>
 				</form>
             </div>
           </div>

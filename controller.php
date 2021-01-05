@@ -31,10 +31,9 @@ class database{
             'datauser'=>'dataUser.php',
             'tambahuser'=>'tambahuser.php',
             'edituser'=>'edituser.php',
-            'returnbarang'=>'returnbarang.php',
-            'transaksi'=>'transaksi.php',
             'berkas'=>'berkas.php',
-            'upberkas'=>'upberkas.php'
+            'upberkas'=>'upberkas.php',
+            'peserta'=>'peserta.php'
         ];
        
         if (array_key_exists($idhalaman, $halaman)) {
@@ -112,6 +111,7 @@ class database{
         }
 
     }
+
     function hapusUser($id)
     {
         $query = "DELETE FROM tb_users WHERE id=$id";
@@ -125,69 +125,38 @@ class database{
             return false;
         }
     }
-    function tfBarang($id,$jumlah,$iduser){
-        $query = "SELECT qty,keterangan FROM barang WHERE id=$id";
-        $sql = mysqli_query($this->koneksi,$query);
-        $row = mysqli_fetch_array($sql);
-        $jumlahHasil = $row['qty'] - $jumlah;
-        if ($row['keterangan'] != null) {
-            $jumlahDiluar = explode(" ",$row['keterangan']);
-            $jumlahs = $jumlahDiluar[1]; 
-            $jumlahJumlah = $jumlahs + $jumlah;
-            $query2 = "UPDATE barang SET qty='$jumlahHasil',keterangan='diluar $jumlahJumlah' WHERE id=$id ";
-        }else{
-        $query2 = "UPDATE barang SET qty='$jumlahHasil',keterangan='diluar $jumlah' WHERE id=$id ";
-        }
-        $sql2 = mysqli_query($this->koneksi,$query2);
-        $db = new database;
-        $kode = "KELUAR-". $db->incrementalHash();
-        $queryTransaksi = "INSERT INTO transaksi VALUES(null,'$kode','Keluar',$id,now(),$iduser,$jumlah)";
-        $sqlTransaksi = mysqli_query($this->koneksi,$queryTransaksi);
-        if($sql2 == true AND $sqlTransaksi) {
-            return true;
-        }
-        else{
-            return false;
-        }
+
+
+    function luluskan($id)
+    {
+        $query = "UPDATE tb_users SET status='1' WHERE id=$id";
+        $sql= mysqli_query($this->koneksi,$query);
+        return $sql;
     }
-    function ambilReturnBarang(){
-        $query = "SELECT * FROM barang WHERE keterangan LIKE 'diluar%'";
+
+    function tidakLuluskan($id)
+    {
+        $query = "UPDATE tb_users SET status='0' WHERE id=$id";
+        $sql= mysqli_query($this->koneksi,$query);
+        return $sql;
+    }
+
+
+    function ambilPeserta()
+    {
+        $query = "SELECT * FROM tb_berkas";
         $sql = mysqli_query($this->koneksi,$query);
-        if ($sql->num_rows == 0) {
-            $hasil = null;
-        }else{
-            while($row = mysqli_fetch_array($sql)){
-                $hasil[] = $row;
-            }
+        while($row = mysqli_fetch_array($sql)){
+            $hasil[] = $row;
         }
         return $hasil;
     }
+
     function ambilDiluar($string)
     {
         $jumlahDiluar = explode(" ",$string);
         $jumlahs = $jumlahDiluar[1]; 
         return $jumlahs;
-    }
-    function returnBarang($idBarang,$iduser)
-    {
-        $query = "SELECT qty,keterangan FROM barang WHERE id=$idBarang";
-        $sql = mysqli_query($this->koneksi,$query);
-        $row = mysqli_fetch_array($sql);
-        $jumlahDiluar = explode(" ",$row['keterangan']);
-        $jumlahs = $jumlahDiluar[1]; 
-        $jumlahBarangDidalam = $row['qty'] + $jumlahs;
-        $query2 = "UPDATE barang SET qty='$jumlahBarangDidalam',keterangan=null WHERE id=$idBarang ";
-        $sql2 = mysqli_query($this->koneksi,$query2);
-        $db = new database;
-        $kode = "KELUAR-". $db->incrementalHash();
-        $queryTransaksi = "INSERT INTO transaksi VALUES(null,'$kode','Return',$idBarang,now(),$iduser,$jumlahs)";
-        $sqlTransaksi = mysqli_query($this->koneksi,$queryTransaksi);
-        if($sql2 == true AND $sqlTransaksi) {
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
     function cekBerkas($id)
@@ -255,45 +224,7 @@ class database{
 
         return $key;
     }
-
-    //fungsi transaksi
-    function ambilTransaksi()
-    {
-        $query = "SELECT * FROM transaksi";
-        $sql = mysqli_query($this->koneksi,$query);
-        while($row = mysqli_fetch_array($sql)){
-            $hasil[] = $row;
-        }
-        return $hasil;
-    }
-    function ambilBarangTransaksi($id)
-    {
-        $query = "SELECT * FROM barang WHERE id=$id";
-        $sql = mysqli_query($this->koneksi,$query);
-        $row = mysqli_fetch_array($sql);
-        
-        
-        return $row;
-    }
-    function ambilUserTransaksi($id)
-    {
-        $query = "SELECT * FROM user WHERE id=$id";
-        $sql = mysqli_query($this->koneksi,$query);
-        $row = mysqli_fetch_array($sql);
-        
-        
-        return $row['nama'];
-    }
-    function hitungApaAja($transaksi="semua")
-    {
-        if($transaksi == "semua"){
-            $query = "SELECT * FROM transaksi";
-        }else{
-        $query = "SELECT * FROM transaksi WHERE jenis = '$transaksi'";
-        }
-        $sql = mysqli_query($this->koneksi,$query);
-        return $sql->num_rows;
-    }
+    
     function hitungUser($user="semua")
     {
         if($user == "semua"){
@@ -384,5 +315,14 @@ if (isset($_GET['idhapus'])) {
 if (isset($_GET['hapusdoc'])) {
     $db->hapusBerkas($_GET['hapusdoc'],$_GET['berkasnya']);
     header("Location: home.php?halaman=berkas");
+}
+
+if (isset($_GET['ganti-status'])) {
+    if ($_GET['ganti-status'] == "lulus") {
+        $db->luluskan($_GET['iduser']);
+    }elseif ($_GET['ganti-status'] == "tidak-lulus") {
+        $db->tidakLuluskan($_GET['iduser']);
+    }
+    header("Location: home.php?halaman=peserta");
 }
 ?>
